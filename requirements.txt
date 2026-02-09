@@ -1,8 +1,11 @@
-python-dotenv
-pandas 
-numpy 
-Flask 
-pymongo
+# python-dotenv
+# pandas 
+# numpy 
+# Flask 
+# pymongo
+# certifi
+# pymongo[srv]==3.12
 certifi
-pymongo[srv]
+scikit-learn
+pyaml
 # -e .

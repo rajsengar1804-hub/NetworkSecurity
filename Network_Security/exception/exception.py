@@ -1,29 +1,18 @@
-import sys 
-from Network_Security.logging import logger
+import sys
 
 class NetworkSecurityException(Exception):
     def __init__(self, error_message, error_details: sys):
-        super().__init__(str(error_message))
         self.error_message = error_message
+
         _, _, exc_tb = error_details.exc_info()
         self.line_no = exc_tb.tb_lineno
         self.file_name = exc_tb.tb_frame.f_code.co_filename
 
+        super().__init__(error_message)
+
     def __str__(self):
         return (
-            "Error occured in python script name [{0}] "
-            "line number [{1}] "
-            "error message [{2}]"
-        ).format(
-            self.file_name,
-            self.line_no,          
-            str(self.error_message)
+            f"Error occured in python script name [{self.file_name}] "
+            f"line number [{self.line_no}] "
+            f"error message [{self.error_message}]"
         )
-
-# if __name__ == '__main__':
-#     try:
-#         logger.logging.info("Enter the try block")
-#         a = 1 / 0
-#         print("This will not be printed", a)
-#     except Exception as e:
-#         raise NetworkSecurityException(e, sys)
