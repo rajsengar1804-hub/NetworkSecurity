@@ -6,8 +6,9 @@ from Network_Security.logging.logger import logging
 from Network_Security.entity.config_entity import DataIngestionConfig
 from Network_Security.entity.config_entity import TrainingPipelineConfig
 from Network_Security.components.data_ingestion import DataIngestion
-from Network_Security.entity.config_entity import DataValidationconfig
+from Network_Security.entity.config_entity import DataValidationconfig,DataTransformationconfig
 from Network_Security.components.data_validation import DataValidation
+from Network_Security.components.data_transformation import DataTransformation
 
 
 if __name__ == '__main__':
@@ -22,6 +23,12 @@ if __name__ == '__main__':
         datavalidation=DataValidation(datavalidationconfig,dataingestionartifacts)
         datavalidationartifacts=datavalidation.intiate_data_validation()
         print(datavalidationartifacts)
+        datatranformationconfig=DataTransformationconfig()
+
+        datatranformation=DataTransformation(datatranformationconfig,datavalidationartifacts)
+        datatranformationartifacts=datatranformation.initiate_data_transformation()
+        print(datatranformationartifacts)
+
         
 
     except Exception as ex:

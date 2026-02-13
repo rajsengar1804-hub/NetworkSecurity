@@ -12,3 +12,8 @@ class DataValidationArtifact:
     invalid_train_file_path: str
     invalid_test_file_path: str
     drift_report_file_path: str
+@dataclass
+class DataTranformationArtifact:
+    train_numpy_array_filepath:str
+    test_numpy_array_filepath:str
+    preprocessor_pickle_filepath:str
