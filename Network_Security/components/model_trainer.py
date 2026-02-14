@@ -14,6 +14,7 @@ from sklearn.ensemble import (
     RandomForestClassifier,
     GradientBoostingClassifier
 )
+import mlflow
 
 class ModelTrainer:
     def __init__(self,datatransformationartifact:DataTranformationArtifact
@@ -23,6 +24,17 @@ class ModelTrainer:
             self.modeltrainerconfig=modeltrainerconfig
         except Exception as ex :
             raise NetworkSecurityException(ex,sys)
+    def track_mlflow(self,best_model,classificationmetric):
+        with mlflow.start_run() :
+            f1_score=classificationmetric.f1_score
+            precision_score=classificationmetric.precision_score
+            recall_score=classificationmetric.recall_score
+            mlflow.log_metric("fl_score",f1_score)
+            mlflow.log_metric("precision_score",precision_score)
+            mlflow.log_metric("recall_score",recall_score)
+            mlflow.sklearn.log_model(best_model, artifact_path="model")
+
+        
     def trainmodel(self,x_train,y_train,x_test,y_test):
           try :
             models = {
@@ -37,7 +49,7 @@ class ModelTrainer:
                     # 'criterion':['gini', 'entropy', 'log_loss'],
                     
                     # 'max_features':['sqrt','log2',None],
-                    'n_estimators': [8,16,32,128,256]
+                    'n_estimators': [8,16,256]
                 },
                 "Decision Tree": {
                     'criterion':['gini', 'entropy', 'log_loss'],
@@ -55,7 +67,7 @@ class ModelTrainer:
                 "Logistic Regression":{},
                 "AdaBoost":{
                     'learning_rate':[.1,.01,.001],
-                    'n_estimators': [8,16,32,64,128,256]
+                    'n_estimators': [8,16,64,128,256]
                 }
             }
             model_report:dict =evaluate_model(x_train=x_train,y_train=y_train,x_test=x_test,y_test=y_test,
@@ -68,10 +80,15 @@ class ModelTrainer:
             model=models[best_models_name]
             model.fit(x_train,y_train)
             y_train_pred=model.predict(x_train)
+
             classifiaction_report_train=get_classification_report(y_true=y_train,y_pred=y_train_pred)
+            self.track_mlflow(best_model=best_models,classificationmetric=classifiaction_report_train)
+            logging.info("mlflow track for training is done")
+
             y_test_pred=model.predict(x_test)
             classifiaction_report_test=get_classification_report(y_true=y_test,y_pred=y_test_pred)
-
+            self.track_mlflow(best_model=best_models,classificationmetric=classifiaction_report_train)
+            logging.info("mlflow track  for test is done")
             preprocessor=load_object(filepath=self.datatransformationartifact.preprocessor_pickle_filepath)
             network_obj=Network_model(model=model,preprocessor=preprocessor)
             dir_path=os.path.dirname(self.modeltrainerconfig.modeltrainer_trained_filepath)
