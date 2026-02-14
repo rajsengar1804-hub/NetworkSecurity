@@ -6,9 +6,10 @@ from Network_Security.logging.logger import logging
 from Network_Security.entity.config_entity import DataIngestionConfig
 from Network_Security.entity.config_entity import TrainingPipelineConfig
 from Network_Security.components.data_ingestion import DataIngestion
-from Network_Security.entity.config_entity import DataValidationconfig,DataTransformationconfig
+from Network_Security.entity.config_entity import DataValidationconfig,DataTransformationconfig,ModelTrainerConfig
 from Network_Security.components.data_validation import DataValidation
 from Network_Security.components.data_transformation import DataTransformation
+from Network_Security.components.model_trainer import ModelTrainer
 
 
 if __name__ == '__main__':
@@ -28,6 +29,11 @@ if __name__ == '__main__':
         datatranformation=DataTransformation(datatranformationconfig,datavalidationartifacts)
         datatranformationartifacts=datatranformation.initiate_data_transformation()
         print(datatranformationartifacts)
+
+        modeltrainerconfig=ModelTrainerConfig()
+        modeltrainer=ModelTrainer(datatranformationartifacts,modeltrainerconfig)
+        modeltrainerartifacts=modeltrainer.intiate_model_trainer()
+        logging.info("model training is done")
 
         
 

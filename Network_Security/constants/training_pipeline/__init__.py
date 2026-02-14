@@ -48,3 +48,13 @@ DATA_TRANSFORMATION_IMPUTER_PARAMS: dict = {
     "n_neighbors": 3,
     "weights": "uniform",
 }
+
+"""
+model trainer related constant
+"""
+
+MODEL_TRAINER_DIR_NAME:str='Model_Trainer'
+MODEL_TRAINER_TRAINED_MODEL_DIR:str="trained_model"
+MODEL_TRAINER_TRAINER_MODEL_FILE_NAME:str='model.pkl'
+MODEL_TRAINER_EXPECTED_SCORE:float=0.6
+MODEL_TRAINER_OVER_FIITING_UNDER_FITTING_THRESHOLD: float = 0.05
