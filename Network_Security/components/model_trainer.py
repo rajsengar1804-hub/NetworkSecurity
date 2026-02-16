@@ -15,6 +15,8 @@ from sklearn.ensemble import (
     GradientBoostingClassifier
 )
 import mlflow
+import dagshub
+dagshub.init(repo_owner='rajsengar1804', repo_name='NetworkSecurity', mlflow=True)
 
 class ModelTrainer:
     def __init__(self,datatransformationartifact:DataTranformationArtifact
@@ -94,6 +96,8 @@ class ModelTrainer:
             dir_path=os.path.dirname(self.modeltrainerconfig.modeltrainer_trained_filepath)
             os.makedirs(dir_path,exist_ok=True)
             save_object(file_path=self.modeltrainerconfig.modeltrainer_trained_filepath,obj=network_obj)
+            #model pusher
+            save_object("final_model/model.pkl", network_obj)
             return ModelTrainerArtifact(
                 trained_model_file_path=self.modeltrainerconfig.modeltrainer_trained_filepath,
                 train_metric_artifact=classifiaction_report_train,

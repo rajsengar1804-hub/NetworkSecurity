@@ -114,6 +114,8 @@ class DataTransformation:
                 file_path=self.datatransformationconfig.data_transformation_preprocessor_file_path,
                 obj=preprocessor,
             )
+            #model pusher
+            save_object("final_model/preprocessor.pkl",preprocessor)
 
             logging.info("Preprocessor and transformed data saved successfully")
 
